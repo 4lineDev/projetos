@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jogo do Quadrado</title>
+  <link rel="stylesheet" href="intro css/game.css">
+</head>
+<body>
+  <h1>Jogo do Quadrado</h1>
+  <div id="gameArea">
+    <div id="player"></div>
+  </div>
+  <p id="status">Use ← → para mover</p>
+  
+  <script>
+    // script.js
+
+const gameArea = document.getElementById('gameArea');
+const player = document.getElementById('player');
+const statusText = document.getElementById('status');
+
+let playerX = 135;
+let gameRunning = true;
+
+// Movimento do jogador
+document.addEventListener('keydown', e => {
+  if (!gameRunning) return;
+  if (e.key === 'ArrowLeft' && playerX > 0) {
+    playerX -= 15;
+  } else if (e.key === 'ArrowRight' && playerX < 270) {
+    playerX += 15;
+  }
+  player.style.left = playerX + 'px';
+});
+
+// Criar obstáculos
+function createObstacle() {
+  const obstacle = document.createElement('div');
+  obstacle.classList.add('obstacle');
+  obstacle.style.left = Math.floor(Math.random() * 10) * 30 + 'px';
+  obstacle.style.top = '0px';
+  gameArea.appendChild(obstacle);
+  
+  moveObstacle(obstacle);
+}
+
+// Mover obstáculo
+function moveObstacle(obstacle) {
+  let obstacleY = 0;
+  const interval = setInterval(() => {
+    if (!gameRunning) {
+      clearInterval(interval);
+      return;
+    }
+    obstacleY += 5;
+    obstacle.style.top = obstacleY + 'px';
+
+    // Colisão
+    if (obstacleY > 360) {
+      const obstacleX = parseInt(obstacle.style.left);
+      if (obstacleX === playerX) {
+        statusText.textContent = 'Game Over!';
+        gameRunning = false;
+        clearInterval(interval);
+      }
+    }
+
+    // Remover obstáculo fora da tela
+    if (obstacleY > 400) {
+      obstacle.remove();
+      clearInterval(interval);
+    }
+  }, 50);
+}
+
+// Loop para criar obstáculos periodicamente
+function startGame() {
+  setInterval(() => {
+    if (gameRunning) {
+      createObstacle();
+    }
+  }, 1000);
+}
+
+startGame();
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: black;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  .cosmic-clock {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  #stars {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+  }
+  
+  .clock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+  }
+  
+  .hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    background: white;
+    border-radius: 2px;
+  }
+  
+  .hour {
+    width: 6px;
+    height: 60px;
+  }
+  
+  .minute {
+    width: 4px;
+    height: 90px;
+    background: #a0d8ef;
+  }
+  
+  .second {
+    width: 2px;
+    height: 110px;
+    background: #ff6f61;
+  }
+  
+  .center-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .time-display {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
+    color: white;
+  }
+  
+  button {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid white;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+  }
+  
+  button:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  .planet {
+    position: absolute;
+    border-radius: 50%;
+  }
+  
+  .planet.orbit1 {
+    width: 20px;
+    height: 20px;
+    background: #ffcc00;
+  }
+  
+  .planet.orbit2 {
+    width: 30px;
+    height: 30px;
+    background: #00ccff;
+  }
+  
+  .planet.orbit3 {
+    width: 15px;
+    height: 15px;
+    background: #cc00ff;
+  }
+  

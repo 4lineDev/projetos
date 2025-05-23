@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relógio Cósmico</title>
+  <link rel="stylesheet" href="intro css/relogio.css">
+</head>
+<body>
+  <div class="cosmic-clock">
+    <div class="planet orbit1"></div>
+    <div class="planet orbit2"></div>
+    <div class="planet orbit3"></div>
+    <canvas id="stars"></canvas>
+    <div class="clock">
+      <div class="hand hour"></div>
+      <div class="hand minute"></div>
+      <div class="hand second"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="time-display"></div>
+    <button id="toggleConstellations">Modo Constelação</button>
+  </div>
+  <button id="toggleComets">Ativar Modo Cometa</button>
+  
+  <script>
+    const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+let stars = [];
+let constellation = false;
+
+for(let i = 0; i < 150; i++) {
+  stars.push({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    radius: Math.random() * 2
+  });
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = 'white';
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  if(constellation) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    for(let i = 0; i < stars.length; i++) {
+      for(let j = i + 1; j < stars.length; j++) {
+        const dx = stars[i].x - stars[j].x;
+        const dy = stars[i].y - stars[j].y;
+        if(Math.sqrt(dx*dx + dy*dy) < 100) {
+          ctx.moveTo(stars[i].x, stars[i].y);
+          ctx.lineTo(stars[j].x, stars[j].y);
+        }
+      }
+    }
+    ctx.stroke();
+  }
+}
+
+function animateStars() {
+  drawStars();
+  requestAnimationFrame(animateStars);
+}
+
+animateStars();
+
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+
+document.getElementById('toggleConstellations').addEventListener('click', () => {
+  constellation = !constellation;
+});
+
+// Relógio
+const hourHand = document.querySelector('.hour');
+const minuteHand = document.querySelector('.minute');
+const secondHand = document.querySelector('.second');
+const timeDisplay = document.querySelector('.time-display');
+
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+
+  hourHand.style.transform = `translate(-50%, 0) rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
+  minuteHand.style.transform = `translate(-50%, 0) rotate(${minutes * 6}deg)`;
+  secondHand.style.transform = `translate(-50%, 0) rotate(${seconds * 6}deg)`;
+
+  timeDisplay.textContent = now.toLocaleTimeString();
+
+  // Troca de tema
+  const body = document.body;
+  if(hours >= 6 && hours < 12) {
+    body.style.background = 'linear-gradient(#FFDEE9, #B5FFFC)';
+  } else if(hours >= 12 && hours < 18) {
+    body.style.background = 'linear-gradient(#FEE140, #FA709A)';
+  } else if(hours >= 18 && hours < 21) {
+    body.style.background = 'linear-gradient(#3a1c71, #d76d77, #ffaf7b)';
+  } else {
+    body.style.background = 'black';
+  }
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+let comets = [];
+let cometMode = false;
+const planetElements = [
+  document.querySelector('.planet.orbit1'),
+  document.querySelector('.planet.orbit2'),
+  document.querySelector('.planet.orbit3')
+];
+
+let planetAngles = [0, 0, 0];
+
+function updatePlanets() {
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  const orbits = [80, 120, 160];
+  const speeds = [0.01, 0.007, 0.004];
+
+  planetElements.forEach((planet, i) => {
+    planetAngles[i] += speeds[i];
+    const x = centerX + orbits[i] * Math.cos(planetAngles[i]) - planet.offsetWidth / 2;
+    const y = centerY + orbits[i] * Math.sin(planetAngles[i]) - planet.offsetHeight / 2;
+
+    planet.style.left = `${x}px`;
+    planet.style.top = `${y}px`;
+  });
+}
+
+function animate() {
+  drawStars();
+  updatePlanets();
+  drawComets();
+  requestAnimationFrame(animate);
+}
+
+animate();
+document.getElementById('toggleComets').addEventListener('click', () => {
+  cometMode = !cometMode;
+  if (cometMode) {
+    generateComet();
+  }
+});
+
+function generateComet() {
+  if (!cometMode) return;
+
+  comets.push({
+    x: Math.random() * width,
+    y: 0,
+    vx: Math.random() * 2 + 1,
+    vy: Math.random() * 2 + 1
+  });
+
+  setTimeout(generateComet, Math.random() * 3000 + 1000);
+}
+
+function drawComets() {
+  comets.forEach((comet, index) => {
+    comet.x += comet.vx;
+    comet.y += comet.vy;
+
+    ctx.beginPath();
+    ctx.moveTo(comet.x, comet.y);
+    ctx.lineTo(comet.x - comet.vx * 5, comet.y - comet.vy * 5);
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+    ctx.stroke();
+
+    // Remove se sair da tela
+    if (comet.x > width || comet.y > height) {
+      comets.splice(index, 1);
+    }
+  });
+}
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallax Story</title>
+  <link rel="stylesheet" href="intro css/historia.css">
+</head>
+<body>
+
+  <section class="scene" id="scene1">
+    <h1>Era uma vez...</h1>
+  </section>
+
+  <section class="scene" id="scene2">
+    <h1>Em uma terra distante...</h1>
+  </section>
+
+  <section class="scene" id="scene3">
+    <h1>Um herói nasceu...</h1>
+  </section>
+
+  <section class="scene" id="scene4">
+    <h1>Que enfrentou muitos desafios...</h1>
+  </section>
+
+  <section class="scene" id="scene5">
+    <h1>E encontrou o seu destino.</h1>
+    <button id="restart">Reiniciar História</button>
+  </section>
+
+  <script >
+    const scenes = document.querySelectorAll('.scene');
+
+window.addEventListener('scroll', () => {
+  const trigger = window.innerHeight * 0.75;
+
+  scenes.forEach(scene => {
+    const top = scene.getBoundingClientRect().top;
+
+    if(top < trigger) {
+      scene.style.opacity = 1;
+      scene.style.transform = 'translateY(0)';
+    } else {
+      scene.style.opacity = 0;
+      scene.style.transform = 'translateY(50px)';
+    }
+  });
+});
+
+// Botão de reiniciar
+document.getElementById('restart').addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+  </script>
+</body>
+</html>

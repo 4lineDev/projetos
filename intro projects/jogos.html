@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameZone - Plataforma de Jogos</title>
+  <link rel="stylesheet" href="intro css/jogos.css" />
+</head>
+<body>
+  <header>
+    <h1>🎮 GameZone</h1>
+    <p>Explore os melhores jogos online!</p>
+    <div class="filters">
+      <button onclick="filterGames('todos')">Todos</button>
+      <button onclick="filterGames('ação')">Ação</button>
+      <button onclick="filterGames('aventura')">Aventura</button>
+      <button onclick="filterGames('corrida')">Corrida</button>
+    </div>
+  </header>
+
+  <main id="game-list">
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GameZone. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const games = [
+  { name: "Corrida Explosiva", category: "corrida", image: "https://i.ytimg.com/vi/sEYX7XhMPBE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDQTwterFe6eVJu1fc94oSxgKvdNQ" },
+  { name: "Guerra Galáctica", category: "ação", image: "https://gamehall.com.br/wp-content/uploads/2024/02/maxresdefault-2-1024x576.webp" },
+  { name: "Ilha Perdida", category: "aventura", image: "https://play-lh.googleusercontent.com/9uNBTK8wTVLVrXzWMxv8hsZl-yvkj_fB002Yib7W_Wuv7QvSaSHyg_IlDlhPgyMKitU=w526-h296-rw" },
+  { name: "Nitro Speed", category: "corrida", image: "https://i.pinimg.com/736x/3e/dc/d6/3edcd6ca672d04b509a03e21949ce0cd.jpg" },
+  { name: "Caçadores das Sombras", category: "ação", image: "https://meups.com.br/wp-content/uploads/2014/12/Sombras-de-Mordor-e1418826215412-900x503.jpg" },
+  { name: "Floresta Mágica", category: "aventura", image: "https://img.freepik.com/fotos-premium/efeitos-de-arvores-diferentes-da-floresta-magica-para-jogos-de-rpg_670008-107.jpg" },
+];
+
+function renderGames(gamesToRender) {
+  const gameList = document.getElementById('game-list');
+  gameList.innerHTML = '';
+  gamesToRender.forEach(game => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.innerHTML = `
+      <img src="${game.image}" alt="${game.name}" />
+      <h3>${game.name}</h3>
+    `;
+    gameList.appendChild(card);
+  });
+}
+
+function filterGames(category) {
+  if (category === 'todos') {
+    renderGames(games);
+  } else {
+    const filtered = games.filter(game => game.category === category);
+    renderGames(filtered);
+  }
+}
+
+// Inicializa com todos os jogos
+renderGames(games);
+  </script>
+</body>
+</html>
